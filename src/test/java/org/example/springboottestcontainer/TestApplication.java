@@ -11,11 +11,9 @@ public class TestApplication {
     @Bean
     @ServiceConnection
     @SuppressWarnings("resource")
-    public MySQLContainer<?> mySQL() {
+    public MySQLContainer<?> mysql() {
         return new MySQLContainer<>("mysql:8")
-                .withDatabaseName("devdb")
-                .withUsername("devusername")
-                .withPassword("devpassword");
+                .withDatabaseName("devdb");
     }
 
     public static void main(String[] args) {
