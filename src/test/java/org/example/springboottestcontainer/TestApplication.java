@@ -12,10 +12,8 @@ public class TestApplication {
     @Bean
     @RestartScope
     @ServiceConnection
-    @SuppressWarnings("resource")
     public MySQLContainer<?> mysql() {
-        return new MySQLContainer<>("mysql:8")
-                .withDatabaseName("devdb");
+        return new MySQLContainer<>("mysql:8");
     }
 
     public static void main(String[] args) {
