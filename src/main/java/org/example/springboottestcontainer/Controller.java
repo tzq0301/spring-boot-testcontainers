@@ -36,44 +36,32 @@ public class Controller {
                 .single();
     }
 
-//    @GetMapping("/user")
-//    public Iterable<User> listByConditions(@RequestParam(required = false) String name,
-//                                           @RequestParam(required = false) Integer sex) {
-//        MapSqlParameterSource params = new MapSqlParameterSource();
-//
-//        var conditions = "";
-//
-//        if (name != null) {
-//            conditions += " AND `name` = :name";
-//            params.addValue("name", name);
-//        }
-//
-//        if (sex != null) {
-//            conditions += " AND `sex` = :sex";
-//            params.addValue("sex", sex);
-//        }
-//
-//        return jdbcClient.sql("""
-//                        SELECT `id`, `name`, `sex`
-//                        FROM `user`
-//                        WHERE 1 = 1 %s
-//                        ORDER BY `id`
-//                            """.formatted(conditions))
-//                .paramSource(params)
-//                .query(User.class)
-//                .list();
-//    }
-
     @GetMapping("/user")
     public Iterable<User> listByConditions(@RequestParam(required = false) String name,
                                            @RequestParam(required = false) Integer sex) {
-        return jdbcClient.sql("""
-                        SELECT `id`, `name`, `sex`
-                        FROM `user`
-                        WHERE IF(:name IS NULL, TRUE, `name` = :name)
-                          AND IF(:sex IS NULL, TRUE, `sex` = :sex)
-                        ORDER BY `id`
-                            """)
+        MapSqlParameterSource params = new MapSqlParameterSource();
+
+        var sql = """
+                SELECT `id`, `name`, `sex`
+                FROM `user`
+                WHERE 1 = 1
+                """;
+
+        if (name != null) {
+            sql += " AND `name` = :name ";
+            params.addValue("name", name);
+        }
+
+        if (sex != null) {
+            sql += " AND `sex` = :sex ";
+            params.addValue("sex", sex);
+        }
+
+        sql += """
+                ORDER BY `id`
+                """;
+
+        return jdbcClient.sql(sql)
                 .param("name", name)
                 .param("sex", sex)
                 .query(User.class)
