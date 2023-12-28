@@ -1,4 +1,4 @@
 package org.example.springboottestcontainer;
 
-public record User(Long id, String name) {
+public record User(Long id, String name, Integer sex) {
 }
